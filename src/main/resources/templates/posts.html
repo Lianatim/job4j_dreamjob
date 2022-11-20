@@ -28,6 +28,7 @@
             <div class="navbar-nav">
                 <a class="nav-item nav-link active" href="#">Главная <span class="sr-only">(current)</span></a>
                 <a class="nav-item nav-link" th:href="@{/posts}">Вакансии</a>
+                <a class="nav-item nav-link" th:href="@{/formAddPost}">Добавить вакансию</a>
                 <a class="nav-item nav-link" th:href="@{/candidates}">Кандидаты</a>
             </div>
         </div>
@@ -38,6 +39,8 @@
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Имя</th>
+                <th scope="col">Описание вакансии</th>
+                <th scope="col">Дата создания вакансии</th>
             </tr>
             </thead>
             <tbody>
