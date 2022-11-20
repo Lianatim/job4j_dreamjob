@@ -1,18 +1,24 @@
 package ru.job4j.dreamjob.model;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Post {
     private int id;
     private String name;
+    private String desc;
+    private LocalDateTime created;
 
     public Post() {
     }
 
-    public Post(int id, String name) {
+    public Post(int id, String name, String desc, LocalDateTime created) {
         this.id = id;
         this.name = name;
+        this.desc = desc;
+        this.created = created;
     }
+
 
     public int getId() {
         return id;
@@ -28,6 +34,22 @@ public class Post {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    public LocalDateTime getCreated() {
+        return created;
+    }
+
+    public void setCreated(LocalDateTime created) {
+        this.created = created;
     }
 
     @Override
