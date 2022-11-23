@@ -2,16 +2,14 @@ package ru.job4j.dreamjob.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import ru.job4j.dreamjob.model.Post;
 import ru.job4j.dreamjob.store.PostStore;
 
 import java.time.LocalDateTime;
 
 @Controller
+//@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "No such Order")
 public class PostController {
 
     private final PostStore postStore = PostStore.instOf();
@@ -37,13 +35,15 @@ public class PostController {
 
     @GetMapping("/formUpdatePost/{postId}")
     public String formUpdatePost(Model model, @PathVariable("postId") int id) {
-        model.addAttribute("post", postStore.findById(id).orElseThrow(IllegalStateException::new));
+        model.addAttribute("post", postStore.findById(id).orElseThrow(() -> new PostNotFoundException(id)));
         return "updatePost";
     }
 
     @PostMapping("/updatePost")
     public String updatePost(@ModelAttribute Post post) {
-        postStore.update(post);
+        if (postStore.update(post)) {
+            throw new PostNotFoundException(post.getId());
+        }
         return "redirect:/posts";
     }
 }
