@@ -14,7 +14,7 @@ public class PostStore {
     private static final PostStore INST = new PostStore();
 
     private final Map<Integer, Post> posts = new ConcurrentHashMap<>();
-    private AtomicInteger count = new AtomicInteger(3);
+    private final AtomicInteger count = new AtomicInteger(3);
 
     private PostStore() {
         posts.put(1, new Post(1, "Junior Java Job", "Наша команда разрабатывает программное решение для финансового сектора.", LocalDateTime.now()));
@@ -33,7 +33,8 @@ public class PostStore {
     public void add(Post post) {
         int id = count.incrementAndGet();
         post.setId(id);
-        posts.put(id, post);
+        post.setCreated(LocalDateTime.now());
+        posts.putIfAbsent(id, post);
     }
 
     public Optional<Post> findById(int id) {
@@ -41,6 +42,7 @@ public class PostStore {
     }
 
     public boolean update(Post post) {
+        post.setCreated(LocalDateTime.now());
         return posts.replace(post.getId(), posts.get(post.getId()), post);
     }
 }

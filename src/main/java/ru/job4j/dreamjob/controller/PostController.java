@@ -9,7 +9,6 @@ import ru.job4j.dreamjob.store.PostStore;
 import java.time.LocalDateTime;
 
 @Controller
-//@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "No such Order")
 public class PostController {
 
     private final PostStore postStore = PostStore.instOf();
@@ -35,14 +34,14 @@ public class PostController {
 
     @GetMapping("/formUpdatePost/{postId}")
     public String formUpdatePost(Model model, @PathVariable("postId") int id) {
-        model.addAttribute("post", postStore.findById(id).orElseThrow(() -> new PostNotFoundException(id)));
+        model.addAttribute("post", postStore.findById(id).orElseThrow(() -> new ObjectNotFoundException(id)));
         return "updatePost";
     }
 
     @PostMapping("/updatePost")
     public String updatePost(@ModelAttribute Post post) {
-        if (postStore.update(post)) {
-            throw new PostNotFoundException(post.getId());
+        if (!postStore.update(post)) {
+            throw new ObjectNotFoundException(post.getId());
         }
         return "redirect:/posts";
     }

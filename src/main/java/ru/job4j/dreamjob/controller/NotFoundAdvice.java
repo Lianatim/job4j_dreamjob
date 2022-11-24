@@ -10,7 +10,7 @@ import java.io.IOException;
 
 @ControllerAdvice
 public class NotFoundAdvice extends ResponseEntityExceptionHandler {
-    @ExceptionHandler(PostNotFoundException.class)
+    @ExceptionHandler({ObjectNotFoundException.class})
     public void springHandleNotFound(HttpServletResponse response) throws IOException {
         response.sendError(HttpStatus.NOT_FOUND.value());
     }
