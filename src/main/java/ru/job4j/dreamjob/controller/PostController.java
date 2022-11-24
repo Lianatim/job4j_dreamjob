@@ -4,14 +4,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.job4j.dreamjob.model.Post;
-import ru.job4j.dreamjob.store.PostStore;
+import ru.job4j.dreamjob.service.PostService;
 
 import java.time.LocalDateTime;
 
 @Controller
 public class PostController {
 
-    private final PostStore postStore = PostStore.instOf();
+    private final PostService postStore = PostService.instOf();
 
     @GetMapping("/posts")
     public String posts(Model model) {
