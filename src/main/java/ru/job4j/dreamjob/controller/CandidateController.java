@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import ru.job4j.dreamjob.exception.EntityNotFoundException;
 import ru.job4j.dreamjob.model.Candidate;
 import ru.job4j.dreamjob.store.CandidateStore;
 
@@ -35,14 +36,14 @@ public class CandidateController {
 
     @GetMapping("/formUpdateCandidate/{candidateId}")
     public String formUpdateCandidate(Model model, @PathVariable("candidateId") int id) {
-        model.addAttribute("candidate", candidateStore.findById(id).orElseThrow(() -> new ObjectNotFoundException(id)));
+        model.addAttribute("candidate", candidateStore.findById(id).orElseThrow(() -> new EntityNotFoundException(id)));
         return "updateCandidate";
     }
 
     @PostMapping("/updateCandidate")
     public String updatePost(@ModelAttribute Candidate candidate) {
         if (!candidateStore.update(candidate)) {
-            throw new ObjectNotFoundException(candidate.getId());
+            throw new EntityNotFoundException(candidate.getId());
         }
         return "redirect:/candidates";
     }

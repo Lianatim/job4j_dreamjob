@@ -3,6 +3,7 @@ package ru.job4j.dreamjob.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.job4j.dreamjob.exception.EntityNotFoundException;
 import ru.job4j.dreamjob.model.Post;
 import ru.job4j.dreamjob.service.PostService;
 
@@ -34,14 +35,14 @@ public class PostController {
 
     @GetMapping("/formUpdatePost/{postId}")
     public String formUpdatePost(Model model, @PathVariable("postId") int id) {
-        model.addAttribute("post", postStore.findById(id).orElseThrow(() -> new ObjectNotFoundException(id)));
+        model.addAttribute("post", postStore.findById(id).orElseThrow(() -> new EntityNotFoundException(id)));
         return "updatePost";
     }
 
     @PostMapping("/updatePost")
     public String updatePost(@ModelAttribute Post post) {
         if (!postStore.update(post)) {
-            throw new ObjectNotFoundException(post.getId());
+            throw new EntityNotFoundException(post.getId());
         }
         return "redirect:/posts";
     }

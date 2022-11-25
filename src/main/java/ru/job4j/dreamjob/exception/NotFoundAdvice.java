@@ -1,4 +1,4 @@
-package ru.job4j.dreamjob.controller;
+package ru.job4j.dreamjob.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -10,7 +10,7 @@ import java.io.IOException;
 
 @ControllerAdvice
 public class NotFoundAdvice extends ResponseEntityExceptionHandler {
-    @ExceptionHandler({ObjectNotFoundException.class})
+    @ExceptionHandler({EntityNotFoundException.class})
     public void springHandleNotFound(HttpServletResponse response) throws IOException {
         response.sendError(HttpStatus.NOT_FOUND.value());
     }
