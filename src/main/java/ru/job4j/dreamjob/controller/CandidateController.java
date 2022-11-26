@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import ru.job4j.dreamjob.exception.EntityNotFoundException;
 import ru.job4j.dreamjob.model.Candidate;
+import ru.job4j.dreamjob.model.City;
 import ru.job4j.dreamjob.service.CandidateService;
+import ru.job4j.dreamjob.service.CityService;
 
 import java.time.LocalDateTime;
 
@@ -17,9 +19,11 @@ import java.time.LocalDateTime;
 @ThreadSafe
 public class CandidateController {
     private final CandidateService candidateService;
+    private final CityService cityService;
 
-    public CandidateController(CandidateService candidateService) {
+    public CandidateController(CandidateService candidateService, CityService cityService) {
         this.candidateService = candidateService;
+        this.cityService = cityService;
     }
 
     @GetMapping("/candidates")
@@ -30,12 +34,14 @@ public class CandidateController {
 
     @GetMapping("/formAddCandidate")
     public String addCandidate(Model model) {
-        model.addAttribute("candidate", new Candidate(0, "Заполните название", "Заполните описание", LocalDateTime.now()));
+        model.addAttribute("candidate", new Candidate(0, "Заполните название", "Заполните описание", new City(), LocalDateTime.now()));
+        model.addAttribute("cities", cityService.getAllCities());
         return "addCandidate";
     }
 
     @PostMapping("/createCandidate")
     public String createCandidate(@ModelAttribute Candidate candidate) {
+        candidate.setCity(cityService.findById(candidate.getCity().getId()).orElseThrow(() -> new EntityNotFoundException(candidate.getId())));
         candidateService.add(candidate);
         return  "redirect:/candidates";
     }
@@ -43,11 +49,13 @@ public class CandidateController {
     @GetMapping("/formUpdateCandidate/{candidateId}")
     public String formUpdateCandidate(Model model, @PathVariable("candidateId") int id) {
         model.addAttribute("candidate", candidateService.findById(id).orElseThrow(() -> new EntityNotFoundException(id)));
+        model.addAttribute("cities", cityService.getAllCities());
         return "updateCandidate";
     }
 
     @PostMapping("/updateCandidate")
     public String updatePost(@ModelAttribute Candidate candidate) {
+        candidate.setCity(cityService.findById(candidate.getCity().getId()).orElseThrow(() -> new EntityNotFoundException(candidate.getId())));
         if (!candidateService.update(candidate)) {
             throw new EntityNotFoundException(candidate.getId());
         }

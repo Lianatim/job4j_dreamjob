@@ -2,6 +2,7 @@ package ru.job4j.dreamjob.store;
 
 import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Repository;
+import ru.job4j.dreamjob.model.City;
 import ru.job4j.dreamjob.model.Post;
 
 import java.time.LocalDateTime;
@@ -10,6 +11,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+
 @Repository
 @ThreadSafe
 public class PostStore {
@@ -18,9 +20,9 @@ public class PostStore {
     private final AtomicInteger count = new AtomicInteger(3);
 
     private PostStore() {
-        posts.put(1, new Post(1, "Junior Java Job", "Наша команда разрабатывает программное решение для финансового сектора.", LocalDateTime.now()));
-        posts.put(2, new Post(2, "Middle Java Job", "Ищем Android-программиста в молодую развивающуюся команду.", LocalDateTime.now()));
-        posts.put(3, new Post(3, "Senior Java Job", "Мы IT-компания из Санкт-Петербурга, которая занимается разработкой мобильных приложений, веб-порталов.", LocalDateTime.now()));
+        posts.put(1, new Post(1, "Junior Java Job", "Наша команда разрабатывает программное решение для финансового сектора.", new City(2, "СПб"), LocalDateTime.now()));
+        posts.put(2, new Post(2, "Middle Java Job", "Ищем Android-программиста в молодую развивающуюся команду.", new City(1, "Москва"), LocalDateTime.now()));
+        posts.put(3, new Post(3, "Senior Java Job", "Мы IT-компания из Санкт-Петербурга, которая занимается разработкой мобильных приложений, веб-порталов.", new City(3, "Екб"), LocalDateTime.now()));
     }
 
     public Collection<Post> findAll() {
@@ -35,7 +37,7 @@ public class PostStore {
     }
 
     public Optional<Post> findById(int id) {
-        return  Optional.ofNullable(posts.get(id));
+        return Optional.ofNullable(posts.get(id));
     }
 
     public boolean update(Post post) {
