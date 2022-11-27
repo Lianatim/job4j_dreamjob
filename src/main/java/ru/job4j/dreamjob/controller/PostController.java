@@ -32,7 +32,7 @@ public class PostController {
 
     @GetMapping("/formAddPost")
     public String addPost(Model model) {
-        model.addAttribute("post", new Post(0, "Заполните название", "Заполните описание", new City(), LocalDateTime.now()));
+        model.addAttribute("post", new Post(0, "Заполните название", "Заполните описание", new City(), true, LocalDateTime.now()));
         model.addAttribute("cities", cityService.getAllCities());
         return "addPost";
     }
@@ -40,7 +40,6 @@ public class PostController {
 
     @PostMapping("/createPost")
     public String createPost(@ModelAttribute Post post) {
-        post.setCity(cityService.findById(post.getCity().getId()).orElseThrow(() -> new EntityNotFoundException(post.getId())));
         postService.add(post);
         return "redirect:/posts";
     }
@@ -54,7 +53,6 @@ public class PostController {
 
     @PostMapping("/updatePost")
     public String updatePost(@ModelAttribute Post post) {
-        post.setCity(cityService.findById(post.getCity().getId()).orElseThrow(() -> new EntityNotFoundException(post.getId())));
         if (!postService.update(post)) {
             throw new EntityNotFoundException(post.getId());
         }

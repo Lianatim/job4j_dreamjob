@@ -20,9 +20,9 @@ public class PostStore {
     private final AtomicInteger count = new AtomicInteger(3);
 
     private PostStore() {
-        posts.put(1, new Post(1, "Junior Java Job", "Наша команда разрабатывает программное решение для финансового сектора.", new City(2, "СПб"), LocalDateTime.now()));
-        posts.put(2, new Post(2, "Middle Java Job", "Ищем Android-программиста в молодую развивающуюся команду.", new City(1, "Москва"), LocalDateTime.now()));
-        posts.put(3, new Post(3, "Senior Java Job", "Мы IT-компания из Санкт-Петербурга, которая занимается разработкой мобильных приложений, веб-порталов.", new City(3, "Екб"), LocalDateTime.now()));
+        posts.put(1, new Post(1, "Junior Java Job", "Наша команда разрабатывает программное решение для финансового сектора.", new City(2, "СПб"), true, LocalDateTime.now()));
+        posts.put(2, new Post(2, "Middle Java Job", "Ищем Android-программиста в молодую развивающуюся команду.", new City(1, "Москва"), true, LocalDateTime.now()));
+        posts.put(3, new Post(3, "Senior Java Job", "Мы IT-компания из Санкт-Петербурга, которая занимается разработкой мобильных приложений, веб-порталов.", new City(3, "Екб"), true, LocalDateTime.now()));
     }
 
     public Collection<Post> findAll() {

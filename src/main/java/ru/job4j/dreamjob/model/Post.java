@@ -8,20 +8,20 @@ public class Post implements Serializable {
     private int id;
     private String name;
     private String description;
-    private LocalDateTime created;
-
-    private boolean visible;
     private City city;
+    private boolean visible;
+    private LocalDateTime created;
 
     public Post() {
     }
 
-    public Post(int id, String name, String description, City city, LocalDateTime created) {
+    public Post(int id, String name, String description, City city, boolean visible, LocalDateTime created) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.city = city;
         this.created = created;
+        this.visible = visible;
     }
 
 
