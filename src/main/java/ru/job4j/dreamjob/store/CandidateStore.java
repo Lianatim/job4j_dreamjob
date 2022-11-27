@@ -6,6 +6,11 @@ import org.springframework.stereotype.Repository;
 import ru.job4j.dreamjob.model.Candidate;
 import ru.job4j.dreamjob.model.City;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashMap;
@@ -21,9 +26,9 @@ public class CandidateStore {
     private final AtomicInteger count = new AtomicInteger(3);
 
     private CandidateStore() {
-        candidates.put(1, new Candidate(1, "Java Junior", "Проактивное участие в рабочих встречах, предложение идей по дальнейшему развитию продукта", new City(1, "Москва"), LocalDateTime.now()));
-        candidates.put(2, new Candidate(2, "Java Middle", "Доработка существующего кода: анализ кода, поиск и внедрение новых решений для развития продукта", new City(2, "СПб"), LocalDateTime.now()));
-        candidates.put(3, new Candidate(3, "Python Junior", "Написание кода с использованием принципов \"clean code\"", new City(3, "Екб"), LocalDateTime.now()));
+        candidates.put(1, new Candidate(1, "Java Junior", "Проактивное участие в рабочих встречах, предложение идей по дальнейшему развитию продукта", image(1), new City(1, "Москва"), LocalDateTime.now()));
+        candidates.put(2, new Candidate(2, "Java Middle", "Доработка существующего кода: анализ кода, поиск и внедрение новых решений для развития продукта", image(2), new City(2, "СПб"), LocalDateTime.now()));
+        candidates.put(3, new Candidate(3, "Python Junior", "Написание кода с использованием принципов \"clean code\"", image(3), new City(3, "Екб"), LocalDateTime.now()));
     }
 
     public Collection<Candidate> findAll() {
@@ -36,12 +41,27 @@ public class CandidateStore {
         candidate.setCreated(LocalDateTime.now());
         candidates.putIfAbsent(id, candidate);
     }
+
     public Optional<Candidate> findById(int id) {
-        return  Optional.ofNullable(candidates.get(id));
+        return Optional.ofNullable(candidates.get(id));
     }
 
     public boolean update(Candidate candidate) {
         candidate.setCreated(LocalDateTime.now());
         return candidates.replace(candidate.getId(), candidates.get(candidate.getId()), candidate);
+    }
+
+    public byte[] image(int id) {
+        String path = String.format("src/images/%d.jpg", id);
+        byte[] data;
+        try {
+            BufferedImage bImage = ImageIO.read(new File(path));
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ImageIO.write(bImage, "jpg", bos);
+            data = bos.toByteArray();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return data;
     }
 }
