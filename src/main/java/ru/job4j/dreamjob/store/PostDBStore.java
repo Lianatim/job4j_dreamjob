@@ -2,7 +2,6 @@ package ru.job4j.dreamjob.store;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.stereotype.Repository;
-import ru.job4j.dreamjob.exception.EntityNotFoundException;
 import ru.job4j.dreamjob.model.City;
 import ru.job4j.dreamjob.model.Post;
 import ru.job4j.dreamjob.service.CityService;
@@ -11,7 +10,6 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,26 +70,26 @@ public class PostDBStore {
         return rsl;
     }
 
-    public Optional<Post> findById(int id) {
-        Optional<Post> rsl = Optional.empty();
+    public Post findById(int id) {
+        Post post = null;
         try (Connection cn = pool.getConnection();
              PreparedStatement ps =  cn.prepareStatement("SELECT * FROM post WHERE id = ?")
         ) {
             ps.setInt(1, id);
             try (ResultSet it = ps.executeQuery()) {
                 if (it.next()) {
-                    return Optional.of(createPost(it));
+                    post = createPost(it);
                 }
             }
         } catch (SQLException e) {
             LOG.error("Failed connection when looking for id:", e);
         }
-        return rsl;
+        return post;
     }
 
     private static Post createPost(ResultSet resultSet) throws SQLException {
         int id =  resultSet.getInt("city_id");
-        City city = new CityService().findById(id).orElseThrow(() -> new EntityNotFoundException(id));
+        City city = new CityService().findById(id);
         return new Post(resultSet.getInt("id"),
                 resultSet.getString("name"),
                 resultSet.getString("description"),

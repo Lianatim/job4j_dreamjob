@@ -2,12 +2,10 @@ package ru.job4j.dreamjob.service;
 
 import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Service;
-import ru.job4j.dreamjob.exception.EntityNotFoundException;
 import ru.job4j.dreamjob.model.Post;
 import ru.job4j.dreamjob.store.PostDBStore;
 
 import java.util.Collection;
-import java.util.Optional;
 
 @Service
 @ThreadSafe
@@ -25,9 +23,7 @@ public class PostService {
         Collection<Post> posts = postDBStore.findAll();
         posts.forEach(
                 post -> post.setCity(
-                        cityService.findById(post.getCity().getId()).orElseThrow(() -> new EntityNotFoundException(post.getCity().getId()))
-                )
-        );
+                        cityService.findById(post.getCity().getId())));
         return posts;
     }
 
@@ -35,7 +31,7 @@ public class PostService {
         postDBStore.add(post);
     }
 
-    public Optional<Post> findById(int id) {
+    public Post findById(int id) {
         return postDBStore.findById(id);
     }
 

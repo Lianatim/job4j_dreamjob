@@ -47,14 +47,14 @@ public class CandidateController {
     public String createCandidate(@ModelAttribute Candidate candidate,
                                   @RequestParam("file") MultipartFile file) throws IOException {
         candidate.setPhoto(file.getBytes());
-        candidate.setCity(cityService.findById(candidate.getCity().getId()).orElseThrow(() -> new EntityNotFoundException(candidate.getId())));
+        candidate.setCity(cityService.findById(candidate.getCity().getId()));
         candidateService.add(candidate);
         return "redirect:/candidates";
     }
 
     @GetMapping("/formUpdateCandidate/{candidateId}")
     public String formUpdateCandidate(Model model, @PathVariable("candidateId") int id) {
-        model.addAttribute("candidate", candidateService.findById(id).orElseThrow(() -> new EntityNotFoundException(id)));
+        model.addAttribute("candidate", candidateService.findById(id));
         model.addAttribute("cities", cityService.getAllCities());
         return "updateCandidate";
     }
@@ -63,7 +63,7 @@ public class CandidateController {
     public String updatePost(@ModelAttribute Candidate candidate,
                              @RequestParam("file") MultipartFile file) throws IOException {
         candidate.setPhoto(file.getBytes());
-        candidate.setCity(cityService.findById(candidate.getCity().getId()).orElseThrow(() -> new EntityNotFoundException(candidate.getId())));
+        candidate.setCity(cityService.findById(candidate.getCity().getId()));
         if (!candidateService.update(candidate)) {
             throw new EntityNotFoundException(candidate.getId());
         }
@@ -72,7 +72,7 @@ public class CandidateController {
 
     @GetMapping("/photoCandidate/{candidateId}")
     public ResponseEntity<Resource> download(@PathVariable("candidateId") Integer candidateId) {
-        Candidate candidate = candidateService.findById(candidateId).orElseThrow(() -> new EntityNotFoundException(candidateId));
+        Candidate candidate = candidateService.findById(candidateId);
         return ResponseEntity.ok()
                 .headers(new HttpHeaders())
                 .contentLength(candidate.getPhoto().length)

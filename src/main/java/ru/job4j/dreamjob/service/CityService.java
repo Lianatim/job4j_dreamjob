@@ -21,7 +21,7 @@ public class CityService {
         return new ArrayList<>(cities.values());
     }
 
-    public Optional<City> findById(int id) {
-        return Optional.ofNullable(cities.get(id));
+    public City findById(int id) {
+        return cities.get(id);
     }
 }

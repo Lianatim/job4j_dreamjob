@@ -6,7 +6,6 @@ import ru.job4j.dreamjob.model.Candidate;
 import ru.job4j.dreamjob.store.CandidateStore;
 
 import java.util.Collection;
-import java.util.Optional;
 
 @Service
 @ThreadSafe
@@ -25,7 +24,7 @@ public class CandidateService {
     public void add(Candidate candidate) {
         candidateStore.add(candidate);
     }
-    public Optional<Candidate> findById(int id) {
+    public Candidate findById(int id) {
         return candidateStore.findById(id);
     }
 
