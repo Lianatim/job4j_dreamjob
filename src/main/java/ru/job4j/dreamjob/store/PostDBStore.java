@@ -4,7 +4,6 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.stereotype.Repository;
 import ru.job4j.dreamjob.model.City;
 import ru.job4j.dreamjob.model.Post;
-import ru.job4j.dreamjob.service.CityService;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -17,6 +16,10 @@ import org.slf4j.LoggerFactory;
 public class PostDBStore {
 
     private static final Logger LOG = LoggerFactory.getLogger(PostDBStore.class.getName());
+    private static final String FIND_ALL = "SELECT * FROM post";
+    private static final String ADD = "INSERT INTO post(name, description, city_id, visible, created) VALUES (?, ?, ?, ?, ?)";
+    private static final String UPDATE = "UPDATE post SET name = ?, description = ?, city_id = ?, visible = ?, created = ?";
+    private static final String FIND_ID = "SELECT * FROM post WHERE id = ?";
     private final BasicDataSource pool;
 
     public PostDBStore(BasicDataSource pool) {
@@ -26,7 +29,7 @@ public class PostDBStore {
     public List<Post> findAll() {
         List<Post> posts = new ArrayList<>();
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps =  cn.prepareStatement("SELECT * FROM post")
+             PreparedStatement ps =  cn.prepareStatement(FIND_ALL)
         ) {
             try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
@@ -42,7 +45,7 @@ public class PostDBStore {
 
     public Post add(Post post) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps =  cn.prepareStatement("INSERT INTO post(name, description, city_id, visible, created) VALUES (?, ?, ?, ?, ?)",
+             PreparedStatement ps =  cn.prepareStatement(ADD,
                      PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             setStatement(ps, post);
@@ -61,7 +64,7 @@ public class PostDBStore {
     public boolean update(Post post) {
         boolean rsl = false;
         try (Connection cn = pool.getConnection();
-        PreparedStatement ps = cn.prepareStatement("UPDATE post SET name = ?, description = ?, city_id = ?, visible = ?, created = ?")) {
+        PreparedStatement ps = cn.prepareStatement(UPDATE)) {
             setStatement(ps, post);
             rsl = ps.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -73,7 +76,7 @@ public class PostDBStore {
     public Post findById(int id) {
         Post post = null;
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps =  cn.prepareStatement("SELECT * FROM post WHERE id = ?")
+             PreparedStatement ps =  cn.prepareStatement(FIND_ID)
         ) {
             ps.setInt(1, id);
             try (ResultSet it = ps.executeQuery()) {
@@ -88,12 +91,10 @@ public class PostDBStore {
     }
 
     private static Post createPost(ResultSet resultSet) throws SQLException {
-        int id =  resultSet.getInt("city_id");
-        City city = new CityService().findById(id);
         return new Post(resultSet.getInt("id"),
                 resultSet.getString("name"),
                 resultSet.getString("description"),
-                city,
+                new City(resultSet.getInt("city_id"), ""),
                 resultSet.getBoolean("visible"),
                 resultSet.getTimestamp("created").toLocalDateTime());
     }
