@@ -10,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.job4j.dreamjob.exception.EntityNotFoundException;
 import ru.job4j.dreamjob.model.Candidate;
 import ru.job4j.dreamjob.model.City;
 import ru.job4j.dreamjob.service.CandidateService;
@@ -38,7 +37,7 @@ public class CandidateController {
 
     @GetMapping("/formAddCandidate")
     public String addCandidate(Model model) {
-        model.addAttribute("candidate", new Candidate(0, "Заполните название", "Заполните описание", new byte[10], new City(), LocalDateTime.now()));
+        model.addAttribute("candidate", new Candidate(0, "Заполните название", "Заполните описание", new byte[10], new City(), true, LocalDateTime.now()));
         model.addAttribute("cities", cityService.getAllCities());
         return "addCandidate";
     }
@@ -47,7 +46,6 @@ public class CandidateController {
     public String createCandidate(@ModelAttribute Candidate candidate,
                                   @RequestParam("file") MultipartFile file) throws IOException {
         candidate.setPhoto(file.getBytes());
-        candidate.setCity(cityService.findById(candidate.getCity().getId()));
         candidateService.add(candidate);
         return "redirect:/candidates";
     }
@@ -63,10 +61,7 @@ public class CandidateController {
     public String updatePost(@ModelAttribute Candidate candidate,
                              @RequestParam("file") MultipartFile file) throws IOException {
         candidate.setPhoto(file.getBytes());
-        candidate.setCity(cityService.findById(candidate.getCity().getId()));
-        if (!candidateService.update(candidate)) {
-            throw new EntityNotFoundException(candidate.getId());
-        }
+        candidateService.update(candidate);
         return "redirect:/candidates";
     }
 

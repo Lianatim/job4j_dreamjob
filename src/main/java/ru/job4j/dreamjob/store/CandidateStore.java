@@ -20,9 +20,9 @@ public class CandidateStore {
     private final AtomicInteger count = new AtomicInteger(3);
 
     private CandidateStore() {
-        candidates.put(1, new Candidate(1, "Java Junior", "Проактивное участие в рабочих встречах, предложение идей по дальнейшему развитию продукта", new byte[0], new City(1, "Москва"), LocalDateTime.now()));
-        candidates.put(2, new Candidate(2, "Java Middle", "Доработка существующего кода: анализ кода, поиск и внедрение новых решений для развития продукта", new byte[0], new City(2, "СПб"), LocalDateTime.now()));
-        candidates.put(3, new Candidate(3, "Python Junior", "Написание кода с использованием принципов \"clean code\"", new byte[0], new City(3, "Екб"), LocalDateTime.now()));
+        candidates.put(1, new Candidate(1, "Java Junior", "Проактивное участие в рабочих встречах, предложение идей по дальнейшему развитию продукта", new byte[0], new City(1, "Москва"), true, LocalDateTime.now()));
+        candidates.put(2, new Candidate(2, "Java Middle", "Доработка существующего кода: анализ кода, поиск и внедрение новых решений для развития продукта", new byte[0], new City(2, "СПб"), true, LocalDateTime.now()));
+        candidates.put(3, new Candidate(3, "Python Junior", "Написание кода с использованием принципов \"clean code\"", new byte[0], new City(3, "Екб"), true, LocalDateTime.now()));
     }
 
     public Collection<Candidate> findAll() {
