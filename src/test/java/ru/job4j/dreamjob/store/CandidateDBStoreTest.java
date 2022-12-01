@@ -31,8 +31,6 @@ class CandidateDBStoreTest {
 
     @Test
     public void whenCreateCandidate() {
-        BasicDataSource pool = new Main().loadPool();
-        CandidateDBStore store = new CandidateDBStore(pool);
         Candidate candidate = new Candidate(0, "Java CV", "description", new byte[0], new City(0, "Moscow"), true, LocalDateTime.now());
         store.add(candidate);
         Candidate candidateInDb = store.findById(candidate.getId());

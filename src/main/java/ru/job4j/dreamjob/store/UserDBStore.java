@@ -17,6 +17,8 @@ public class UserDBStore {
 
     private static final Logger LOG = LoggerFactory.getLogger(PostDBStore.class.getName());
     private static final String ADD = "INSERT INTO users(email, password) VALUES (?, ?)";
+    private static final String FIND_BY_PASSWORD_EMAIL = "SELECT * FROM users WHERE email = ? AND password = ?";
+    private static final String FIND_BY_ID = "SELECT * FROM users WHERE id = ?";
     private final BasicDataSource pool;
 
     public UserDBStore(BasicDataSource pool) {
@@ -25,7 +27,7 @@ public class UserDBStore {
 
     public Optional<User> add(User user) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps =  cn.prepareStatement(ADD,
+             PreparedStatement ps = cn.prepareStatement(ADD,
                      PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, user.getEmail());
@@ -40,5 +42,44 @@ public class UserDBStore {
             LOG.error("Failed connection when add:", e);
         }
         return Optional.ofNullable(user);
+    }
+
+    public Optional<User> findUserByEmailAndPassword(String email, String password) {
+        User user = null;
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement(FIND_BY_PASSWORD_EMAIL)) {
+            ps.setString(1, email);
+            ps.setString(2, password);
+            try (ResultSet it = ps.executeQuery()) {
+                if (it.next()) {
+                    user = getUser(it);
+                }
+            }
+        } catch (SQLException e) {
+            LOG.error("Failed connection when find:", e);
+        }
+        return Optional.ofNullable(user);
+    }
+
+    public Optional<User> findById(int id) {
+        User user = null;
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps =  cn.prepareStatement(FIND_BY_ID)
+        ) {
+            ps.setInt(1, id);
+            try (ResultSet it = ps.executeQuery()) {
+                if (it.next()) {
+                    user = getUser(it);
+                }
+            }
+        } catch (SQLException e) {
+            LOG.error("Failed connection when looking for id:", e);
+        }
+        return Optional.ofNullable(user);
+    }
+
+    public User getUser(ResultSet it) throws SQLException {
+        return new User(it.getInt("id"), it.getString("email"),
+                it.getString("password"));
     }
 }

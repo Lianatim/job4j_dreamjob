@@ -44,12 +44,12 @@
         <form th:action="@{/registration}" method="POST">
           <input type="hidden" name="id" value="0"/>
           <div class="form-group">
-            <label>Email
-              <input type="text" class="form-control" name="email" id="email">
-            </label>
-            <label>Пароль
-              <input type="text" class="form-control" name="password" id="password">
-            </label>
+            <label>Email</label>
+            <input type="text" class="form-control" name="email">
+          </div>
+          <div class="form-group">
+            <label>Пароль</label>
+            <input type="text" class="form-control" name="password">
           </div>
           <button type="submit" class="btn btn-primary">Сохранить</button>
         </form>
