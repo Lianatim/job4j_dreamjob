@@ -64,20 +64,20 @@ public class UserDBStore {
     }
 
     public Optional<User> findById(int id) {
-        User user = null;
+        Optional<User> user = Optional.empty();
         try (Connection cn = pool.getConnection();
              PreparedStatement ps =  cn.prepareStatement(FIND_BY_ID)
         ) {
             ps.setInt(1, id);
             try (ResultSet it = ps.executeQuery()) {
                 if (it.next()) {
-                    user = getUser(it);
+                    user = Optional.of(getUser(it));
                 }
             }
         } catch (SQLException e) {
             LOG.error("Failed connection when looking for id:", e);
         }
-        return Optional.ofNullable(user);
+        return user;
     }
 
     public User getUser(ResultSet it) throws SQLException {
