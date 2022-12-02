@@ -45,20 +45,20 @@ public class UserDBStore {
     }
 
     public Optional<User> findUserByEmailAndPassword(String email, String password) {
-        User user = null;
+        Optional<User> user = Optional.empty();
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(FIND_BY_PASSWORD_EMAIL)) {
             ps.setString(1, email);
             ps.setString(2, password);
             try (ResultSet it = ps.executeQuery()) {
                 if (it.next()) {
-                    user = getUser(it);
+                    user = Optional.of(getUser(it));
                 }
             }
         } catch (SQLException e) {
             LOG.error("Failed connection when find:", e);
         }
-        return Optional.ofNullable(user);
+        return user;
     }
 
     public Optional<User> findById(int id) {
