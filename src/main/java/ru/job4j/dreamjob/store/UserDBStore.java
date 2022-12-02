@@ -26,6 +26,7 @@ public class UserDBStore {
     }
 
     public Optional<User> add(User user) {
+        Optional<User> userAdd = Optional.empty();
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(ADD,
                      PreparedStatement.RETURN_GENERATED_KEYS)
@@ -36,12 +37,13 @@ public class UserDBStore {
             try (ResultSet id = ps.getGeneratedKeys()) {
                 if (id.next()) {
                     user.setId(id.getInt(1));
+                    userAdd = Optional.of(user);
                 }
             }
         } catch (SQLException e) {
             LOG.error("Failed connection when add:", e);
         }
-        return Optional.ofNullable(user);
+        return userAdd;
     }
 
     public Optional<User> findUserByEmailAndPassword(String email, String password) {
