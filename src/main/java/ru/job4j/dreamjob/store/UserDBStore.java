@@ -16,7 +16,7 @@ import java.util.Optional;
 public class UserDBStore {
 
     private static final Logger LOG = LoggerFactory.getLogger(PostDBStore.class.getName());
-    private static final String ADD = "INSERT INTO users(email, password) VALUES (?, ?)";
+    private static final String ADD = "INSERT INTO users(name, email, password) VALUES (?, ?, ?)";
     private static final String FIND_BY_PASSWORD_EMAIL = "SELECT * FROM users WHERE email = ? AND password = ?";
     private static final String FIND_BY_ID = "SELECT * FROM users WHERE id = ?";
     private final BasicDataSource pool;
@@ -31,8 +31,9 @@ public class UserDBStore {
              PreparedStatement ps = cn.prepareStatement(ADD,
                      PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
-            ps.setString(1, user.getEmail());
-            ps.setString(2, user.getPassword());
+            ps.setString(1, user.getName());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPassword());
             ps.execute();
             try (ResultSet id = ps.getGeneratedKeys()) {
                 if (id.next()) {
@@ -66,7 +67,7 @@ public class UserDBStore {
     public Optional<User> findById(int id) {
         Optional<User> user = Optional.empty();
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps =  cn.prepareStatement(FIND_BY_ID)
+             PreparedStatement ps = cn.prepareStatement(FIND_BY_ID)
         ) {
             ps.setInt(1, id);
             try (ResultSet it = ps.executeQuery()) {
@@ -81,7 +82,7 @@ public class UserDBStore {
     }
 
     public User getUser(ResultSet it) throws SQLException {
-        return new User(it.getInt("id"), it.getString("email"),
+        return new User(it.getInt("id"), it.getString("name"), it.getString("email"),
                 it.getString("password"));
     }
 }

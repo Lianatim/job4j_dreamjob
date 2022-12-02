@@ -25,9 +25,10 @@ class UserDBStoreTest {
             statement.execute();
         }
     }
+
     @Test
     void whenAddUser() {
-        User user = new User(0, "email", "password");
+        User user = new User(0, "name", "email", "password");
         store.add(user);
         User userInDb = store.findById(user.getId()).orElseThrow(NoSuchElementException::new);
         assertThat(userInDb.getEmail()).isEqualTo(user.getEmail());
@@ -36,7 +37,7 @@ class UserDBStoreTest {
 
     @Test
     void whenFindUser() {
-        User user = new User(0, "email", "password");
+        User user = new User(0, "name", "email", "password");
         store.add(user);
         User userInDb = store.findUserByEmailAndPassword(user.getEmail(), user.getPassword()).orElseThrow();
         assertThat(userInDb.getEmail()).isEqualTo(user.getEmail());
