@@ -6,12 +6,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.job4j.dreamjob.model.City;
 import ru.job4j.dreamjob.model.Post;
-import ru.job4j.dreamjob.model.User;
 import ru.job4j.dreamjob.service.CityService;
 import ru.job4j.dreamjob.service.PostService;
 
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
+
+import static ru.job4j.dreamjob.utils.HttpSetSession.setSession;
 
 @Controller
 @ThreadSafe
@@ -23,15 +24,6 @@ public class PostController {
     public PostController(PostService postService, CityService cityService) {
         this.postService = postService;
         this.cityService = cityService;
-    }
-
-    public static void setSession(Model model, HttpSession httpSession) {
-        User user = (User) httpSession.getAttribute("user");
-        if (user == null) {
-            user = new User();
-            user.setName("Гость");
-        }
-        model.addAttribute("user", user);
     }
 
     @GetMapping("/posts")

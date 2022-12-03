@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
+import static ru.job4j.dreamjob.utils.HttpSetSession.setSession;
+
 @Controller
 @ThreadSafe
 public class UserController {
@@ -22,15 +24,6 @@ public class UserController {
 
     public UserController(UserService userService) {
         this.userService = userService;
-    }
-
-    public static void setSession(Model model, HttpSession httpSession) {
-        User user = (User) httpSession.getAttribute("user");
-        if (user == null) {
-            user = new User();
-            user.setName("Гость");
-        }
-        model.addAttribute("user", user);
     }
 
     @GetMapping("/formAddUser")
