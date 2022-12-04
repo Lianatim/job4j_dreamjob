@@ -1,4 +1,4 @@
-package ru.job4j.dreamjob.utils;
+package ru.job4j.dreamjob.util;
 
 import org.springframework.ui.Model;
 import ru.job4j.dreamjob.model.User;

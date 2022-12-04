@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
-import static ru.job4j.dreamjob.utils.HttpSetSession.setSession;
+import static ru.job4j.dreamjob.util.HttpSetSession.setSession;
 
 @Controller
 @ThreadSafe

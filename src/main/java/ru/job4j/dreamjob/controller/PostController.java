@@ -12,7 +12,7 @@ import ru.job4j.dreamjob.service.PostService;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 
-import static ru.job4j.dreamjob.utils.HttpSetSession.setSession;
+import static ru.job4j.dreamjob.util.HttpSetSession.setSession;
 
 @Controller
 @ThreadSafe
