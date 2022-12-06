@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.function.Predicate;
 
 @Component
 public class AuthFilter implements Filter {
@@ -31,26 +30,10 @@ public class AuthFilter implements Filter {
         chain.doFilter(req, res);
     }
 
-    enum UserRegistered {
-        LOGIN_PAGE("loginPage"),
-        LOGIN("login"),
-        FORM_ADD_USER("formAddUser"),
-        FAIL("fail"),
-        SUCCESS("success"),
-        REGISTRATION("registration");
 
-        private final String name;
-
-        UserRegistered(String name) {
-            this.name = name;
-        }
-
-        public String getName() {
-            return name;
-        }
-    }
 
     private boolean success(String uri) {
-        return Arrays.stream(UserRegistered.values()).anyMatch(value -> uri.endsWith(value.getName()));
+        return Arrays.stream(UserRegistered.values())
+                .anyMatch(value -> uri.endsWith(value.getName()));
     }
 }
