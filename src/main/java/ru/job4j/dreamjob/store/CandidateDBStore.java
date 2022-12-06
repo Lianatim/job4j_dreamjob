@@ -6,7 +6,6 @@ import ru.job4j.dreamjob.model.City;
 import ru.job4j.dreamjob.model.Candidate;
 
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
@@ -106,6 +105,6 @@ public class CandidateDBStore {
         ps.setBytes(3, candidate.getPhoto());
         ps.setInt(4, candidate.getCity().getId());
         ps.setBoolean(5, candidate.isVisible());
-        ps.setTimestamp(6, Timestamp.valueOf(LocalDateTime.now()));
+        ps.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
     }
 }

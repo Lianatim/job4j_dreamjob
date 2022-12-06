@@ -46,20 +46,32 @@
     <div class="row">
         <div class="card" style="width: 100%">
             <div class="card-header">
-                Авторизация
+                Войти в систему
             </div>
             <div class="card-body">
                 <div th:if="${fail}" class="alert alert-danger" role="alert">
                     Логин или пароль введены не верно!
                 </div>
                 <form th:action="@{/login}" method="POST">
+                    <label>Логин</label>
                     <div class="form-group">
-                        <label>Email</label>
-                        <input type="text" class="form-control" name="email">
+                        <input type="text" class="form-control bg-light col-md-6" placeholder="Введите логин"
+                               name="name" id="name" required>
                     </div>
+                    <label>Электронная почта</label>
                     <div class="form-group">
-                        <label>Пароль</label>
-                        <input type="text" class="form-control" name="password">
+                        <input type="email" class="form-control bg-light col-md-6" placeholder="example@domen"
+                               name="email" id="email" required>
+                    </div>
+                    <label>Пароль</label>
+                    <div class="form-group">
+                        <input type="password" class="form-control bg-light col-md-6"
+                               placeholder="*******"
+                               name="password" id="password" required>
+                    </div>
+                    <div class="form-group">Есть ли у вас еще нет аккаунта :
+                        <a th:href="@{/formAddUser}" class="link" role="button"
+                           aria-pressed="true">Зарегистироваться</a>
                     </div>
                     <button type="submit" class="btn btn-primary">Войти</button>
                 </form>
