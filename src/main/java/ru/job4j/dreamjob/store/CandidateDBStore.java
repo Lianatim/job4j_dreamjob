@@ -17,7 +17,7 @@ public class CandidateDBStore {
     private static final Logger LOG = LoggerFactory.getLogger(CandidateDBStore.class.getName());
     private static final String FIND_ALL = "SELECT * FROM candidate";
     private static final String ADD = "INSERT INTO candidate(name, description, photo, city_id, visible, created) VALUES (?, ?, ?, ?, ?, ?)";
-    private static final String UPDATE = "UPDATE candidate SET name = ?, description = ?, photo = ?, city_id = ?, visible = ?, created = ?";
+        private static final String UPDATE = "UPDATE candidate SET name = ?, description = ?, photo = ?, city_id = ?, visible = ?, created = ? WHERE id = ?";
     private static final String FIND_ID = "SELECT * FROM candidate WHERE id = ?";
     private final BasicDataSource pool;
 
@@ -65,6 +65,7 @@ public class CandidateDBStore {
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(UPDATE)) {
             setStatement(ps, candidate);
+            ps.setInt(7, candidate.getId());
             rsl = ps.executeUpdate() > 0;
         } catch (SQLException e) {
             LOG.error("Failed connection when update:", e);

@@ -50,11 +50,11 @@
         <table class="table">
             <thead>
             <tr>
-                <th scope="col">#</th>
-                <th scope="col">Имя</th>
-                <th scope="col">Описание вакансии</th>
-                <th scope="col">Город</th>
-                <th scope="col">Дата создания вакансии</th>
+                <th scope="col" style="width:5%"># </th>
+                <th scope="col" style="width:20%">Вакансия</th>
+                <th scope="col" style="width:38%">Описание</th>
+                <th scope="col" style="width:15%">Город</th>
+                <th scope="col" style="width:13%">Дата создания вакансии</th>
             </tr>
             </thead>
             <tbody>
@@ -74,7 +74,7 @@
                 </td>
                 <td th:text="${post.description}"/>
                 <td th:text="${post.city.name}" />
-                <td th:text="${post.created}"/>
+                <td th:text="${#temporals.format(post.created, 'dd-MM-yyyy')}"/>
             </tr>
             </tbody>
         </table>
